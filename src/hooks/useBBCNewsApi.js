@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 const BBC_API_URL = 'https://newsapi.org/v2/top-headlines';
-const API_KEY = 'YOUR_API_KEY_HERE'; // Replace with your actual NewsAPI key
+const API_KEY = import.meta.env.VITE_NEWS_API_KEY; // Use environment variable
 
 const fetchBBCNews = async () => {
   const response = await fetch(`${BBC_API_URL}?sources=bbc-news&apiKey=${API_KEY}`);
