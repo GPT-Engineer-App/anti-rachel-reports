@@ -1,28 +1,11 @@
 import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import NewsAPI from 'newsapi';
 import ArticleList from './ArticleList';
 import SearchBar from './SearchBar';
-import { Input } from '@/components/ui/input';
-
-const newsapi = new NewsAPI('YOUR_API_KEY_HERE');
-
-const fetchNews = async () => {
-  const response = await newsapi.v2.everything({
-    q: 'Anti Rachel Reeves',
-    language: 'en',
-    sortBy: 'relevancy',
-    pageSize: 100,
-  });
-  return response.articles;
-};
+import { useNewsApi } from '../hooks/useNewsApi';
 
 const NewsApp = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const { data: articles, isLoading, error } = useQuery({
-    queryKey: ['news'],
-    queryFn: fetchNews,
-  });
+  const { articles, isLoading, error } = useNewsApi('Anti Rachel Reeves');
 
   const filteredArticles = articles?.filter(article =>
     article.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -39,7 +22,7 @@ const NewsApp = () => {
           ))}
         </div>
       ) : error ? (
-        <p className="text-red-500 text-center mt-8">Error loading articles: {error.message}</p>
+        <p className="text-red-500 text-center mt-8">Error loading articles: {error}</p>
       ) : (
         <ArticleList articles={filteredArticles} />
       )}
